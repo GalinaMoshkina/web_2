@@ -94,10 +94,19 @@ function renderTasks() {
   for (const task of tasks) {
     const li = createElement('li', 'task-item');
     li.dataset.id = task.id;
+    if (task.completed) li.classList.add('task-item--done');
+    const checkbox = createElement('input', 'task-item__checkbox');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.completed;
+    checkbox.addEventListener('change', () => toggleTaskCompleted(task.id));
     const titleEl = createElement('span', 'task-item__title', task.title);
     const dateEl = createElement('time', 'task-item__date', formatDate(task.date));
     dateEl.dateTime = task.date;
-    li.append(titleEl, dateEl);
+    const deleteBtn = createElement('button', 'task-item__delete', '✕');
+    deleteBtn.type = 'button';
+    deleteBtn.title = 'Удалить задачу';
+    deleteBtn.addEventListener('click', () => deleteTask(task.id));
+    li.append(checkbox, titleEl, dateEl, deleteBtn);
     taskList.append(li);
   }
 }
@@ -121,3 +130,16 @@ form.addEventListener('submit', (event) => {
   titleInput.focus();
 });
 renderTasks();
+function toggleTaskCompleted(id) {
+  const task = tasks.find((t) => t.id === id);
+  if (!task) return;
+
+  task.completed = !task.completed;
+  saveTasks();
+  renderTasks();
+}
+function deleteTask(id) {
+  tasks = tasks.filter((t) => t.id !== id);
+  saveTasks();
+  renderTasks();
+}

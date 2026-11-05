@@ -112,3 +112,34 @@ button:hover { background: #2563eb; }
   color: #7b8794;
   padding: 24px 0;
 }
+.task-item__checkbox {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  padding: 0;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.task-item__delete {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #9aa5b1;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.task-item__delete:hover {
+  background: #fee2e2;
+  border-color: #fee2e2;
+  color: #dc2626;
+}
+
+.task-item--done .task-item__title {
+  text-decoration: line-through;
+  color: #9aa5b1;
+}
+.task-item--done {
+  opacity: 0.75;
+}
