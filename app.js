@@ -68,6 +68,7 @@ document.body.append(app);
 const STORAGE_KEY = 'tasks';
 let tasks = loadTasks();
 let editingTaskId = null;
+let draggedItemId = null;
 
 function loadTasks() {
   try {
@@ -130,6 +131,28 @@ function renderTasks() {
 
   for (const task of visibleTasks) {
     const li = createElement('li', 'task-item');
+    li.draggable = true;
+    
+    li.addEventListener('dragstart', () => {
+      draggedItemId = task.id;
+      li.classList.add('task-item--dragging');
+    });
+
+    li.addEventListener('dragend', () => {
+      draggedItemId = null;
+      li.classList.remove('task-item--dragging');
+    });
+
+    li.addEventListener('dragover', (event) => {
+      event.preventDefault();
+    });
+
+    li.addEventListener('drop', (event) => {
+      event.preventDefault();
+      if (draggedItemId && draggedItemId !== task.id) {
+        reorderTasks(draggedItemId, task.id);
+      }
+    });
     li.dataset.id = task.id;
     if (task.completed) li.classList.add('task-item--done');
     if (task.id === editingTaskId) {
@@ -209,6 +232,17 @@ function toggleTaskCompleted(id) {
 
 function deleteTask(id) {
   tasks = tasks.filter((t) => t.id !== id);
+  saveTasks();
+  renderTasks();
+}
+function reorderTasks(draggedId, targetId) {
+  const draggedIndex = tasks.findIndex(t => t.id === draggedId);
+  const targetIndex = tasks.findIndex(t => t.id === targetId);
+
+  if (draggedIndex === -1 || targetIndex === -1) return;
+  const [draggedTask] = tasks.splice(draggedIndex, 1);
+  tasks.splice(targetIndex, 0, draggedTask);
+
   saveTasks();
   renderTasks();
 }

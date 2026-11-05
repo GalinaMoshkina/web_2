@@ -195,3 +195,17 @@ button:hover { background: #2563eb; }
   border-color: #bae6fd;
   color: #0284c7;
 }
+
+.task-item {
+  cursor: grab;
+}
+
+.task-item:active {
+  cursor: grabbing;
+}
+
+.task-item--dragging {
+  opacity: 0.5;
+  border: 2px dashed #2563eb;
+  background: #eff6ff;
+}
