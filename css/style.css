@@ -143,3 +143,55 @@ button:hover { background: #2563eb; }
 .task-item--done {
   opacity: 0.75;
 }
+
+.task-item--editing {
+  background: #f8fafc;
+  border: 1px dashed #cbd2d9;
+  box-shadow: none;
+}
+
+.task-item__edit-input {
+  flex: 2 1 150px;
+  padding: 8px 10px;
+}
+
+.task-item__edit-date {
+  flex: 1 1 120px;
+  padding: 8px 10px;
+}
+
+.task-item__save-btn {
+  padding: 8px 12px;
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.task-item__save-btn:hover {
+  background: #059669;
+}
+
+.task-item__cancel-btn {
+  padding: 8px 12px;
+  background: #e2e8f0;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+
+.task-item__cancel-btn:hover {
+  background: #cbd5e1;
+}
+
+.task-item__edit {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #9aa5b1;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.task-item__edit:hover {
+  background: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0284c7;
+}
