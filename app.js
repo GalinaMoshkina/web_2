@@ -1,6 +1,6 @@
 const styleLink = document.createElement('link');
 styleLink.rel = 'stylesheet';
-styleLink.href = 'style.css';
+styleLink.href = 'css/style.css';
 document.head.appendChild(styleLink);
 function createElement(tag, className, text) {
   const el = document.createElement(tag);
@@ -66,3 +66,58 @@ const taskList = createElement('ul', 'task-list');
 main.append(form, toolbar, taskList);
 app.append(header, main);
 document.body.append(app);
+const STORAGE_KEY = 'tasks';
+let tasks = loadTasks();
+function loadTasks() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (error) {
+    console.error('Не удалось прочитать задачи из localStorage:', error);
+    return [];
+  }
+}
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+function formatDate(isoDate) {
+  const [year, month, day] = isoDate.split('-');
+  return `${day}.${month}.${year}`;
+}
+function renderTasks() {
+  taskList.innerHTML = '';
+  if (tasks.length === 0) {
+    const emptyItem = createElement('li', 'task-list__empty', 'Задач пока нет');
+    taskList.append(emptyItem);
+    return;
+  }
+  for (const task of tasks) {
+    const li = createElement('li', 'task-item');
+    li.dataset.id = task.id;
+    const titleEl = createElement('span', 'task-item__title', task.title);
+    const dateEl = createElement('time', 'task-item__date', formatDate(task.date));
+    dateEl.dateTime = task.date;
+    li.append(titleEl, dateEl);
+    taskList.append(li);
+  }
+}
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const title = titleInput.value.trim();
+  const date = dateInput.value;
+  if (!title || !date) {
+    return;
+  }
+  const newTask = {
+    id: crypto.randomUUID(),
+    title,
+    date,
+    completed: false
+  };
+  tasks.push(newTask);
+  saveTasks();
+  renderTasks();
+  form.reset();
+  titleInput.focus();
+});
+renderTasks();
